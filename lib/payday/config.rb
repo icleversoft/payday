@@ -3,7 +3,7 @@ module Payday
   # Payday::Config.default.company_name = "Awesome Corp".
   class Config
     attr_accessor :invoice_logo, :company_name, :company_details, :date_format, :currency
-    attr_reader :stamps
+    attr_accessor :stamps
     # Sets the page size to use. See the
     # {http://prawn.majesticseacreature.com/docs/0.10.2/Prawn/Document/PageGeometry.html Prawn documentation} for valid
     # page_size values.
