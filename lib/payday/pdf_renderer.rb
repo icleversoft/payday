@@ -56,7 +56,7 @@ module Payday
         # width, height = IO.read(stamp)[0x10..0x18].unpack('NN')
         width, height = [300, 136]
         # logo_info = pdf.image(stamp, at: pdf.bounds.top_left, width: width, height: height)
-        logo_info = pdf.image(stamp, at: [(pdf.bounds.width - (width * 0.60))/2, pdf.bounds.top - 30], scale: 0.60)
+        logo_info = pdf.image(stamp, at: [(pdf.bounds.width - (width * 0.45))/2, pdf.bounds.top - 30], scale: 0.45)
         # logo_info = pdf.image(stamp, at: [(pdf.bounds.width - width)/2, 100], width: width, height: height)
         logo_height = logo_info.scaled_height
         
