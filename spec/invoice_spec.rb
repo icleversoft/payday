@@ -171,7 +171,6 @@ module Payday
             LineItem.new(price: 10, quantity: 3, description: "Shirts"),
             LineItem.new(price: 5, quantity: 200, description: "Hats")
           ] * 30
-
           expect(invoice.render_pdf).to match_binary_asset "testing.pdf"
         end
       end
