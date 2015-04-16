@@ -20,8 +20,8 @@ module Payday
       # set up some default styling
       pdf.font_size(8)
 
-      stamp(invoice, pdf)
       company_banner(invoice, pdf)
+      stamp(invoice, pdf)
       bill_to_ship_to(invoice, pdf)
       invoice_details(invoice, pdf)
       line_items_table(invoice, pdf)
