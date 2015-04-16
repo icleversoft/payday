@@ -59,8 +59,6 @@ module Payday
         logo_info = pdf.image(stamp, at: [(pdf.bounds.width - (width * 0.60))/2, pdf.bounds.top - 30], scale: 0.60)
         # logo_info = pdf.image(stamp, at: [(pdf.bounds.width - width)/2, 100], width: width, height: height)
         logo_height = logo_info.scaled_height
-
-        dims = ImageDims.new( stamps[:overdue] )
         
         # pdf.bounding_box([150, pdf.cursor - 50], width: pdf.bounds.width - 300) do
         #   pdf.font("Helvetica-Bold") do
@@ -87,7 +85,7 @@ module Payday
       end
 
       if width.nil? && height.nil? && image.is_a?(String)
-        dims = ImageDims.new( image )
+        width, height = FastImage.size( image )
       end
 
       width, height = [100, 100] if width.nil? && height.nil?

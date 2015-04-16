@@ -177,7 +177,7 @@ module Payday
 
       context "paid, with an svg logo" do
         before do
-          logo = { filename: "spec/assets/tiger.svg", size: "100x100" }
+          logo = { filename: "spec/assets/tiger.svg" }
           Payday::Config.default.invoice_logo = logo
         end
 
