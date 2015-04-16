@@ -34,25 +34,41 @@ module Payday
     end
 
     def self.stamp(invoice, pdf)
-      stamp = nil
+      stamps = invoice_or_default(invoice, :stamps)
       if invoice.refunded?
-        stamp = I18n.t "payday.status.refunded", default: "REFUNDED"
+        stamp = stamps[:refunded]#I18n.t "payday.status.refunded", default: "REFUNDED"
       elsif invoice.paid?
-        stamp = I18n.t "payday.status.paid", default: "PAID"
+        stamp = stamps[:paid]#I18n.t "payday.status.paid", default: "PAID"
       elsif invoice.overdue?
-        stamp = I18n.t "payday.status.overdue", default: "OVERDUE"
+        stamp = stamps[:overdue]#I18n.t "payday.status.overdue", default: "OVERDUE"
+      end
+      
+      # stamp = nil
+      # if invoice.refunded?
+      #   stamp = I18n.t "payday.status.refunded", default: "REFUNDED"
+      # elsif invoice.paid?
+      #   stamp = I18n.t "payday.status.paid", default: "PAID"
+      # elsif invoice.overdue?
+      #   stamp = I18n.t "payday.status.overdue", default: "OVERDUE"
+      # end
+
+      if stamp && File.exist?(stamp)
+        # width, height = IO.read(stamp)[0x10..0x18].unpack('NN')
+        width, height = [300, 136]
+        # logo_info = pdf.image(stamp, at: pdf.bounds.top_left, width: width, height: height)
+        logo_info = pdf.image(stamp, at: [(pdf.bounds.width - (width * 0.60))/2, pdf.bounds.top - 30], scale: 0.60)
+        # logo_info = pdf.image(stamp, at: [(pdf.bounds.width - width)/2, 100], width: width, height: height)
+        logo_height = logo_info.scaled_height
+        
+        # pdf.bounding_box([150, pdf.cursor - 50], width: pdf.bounds.width - 300) do
+        #   pdf.font("Helvetica-Bold") do
+        #     pdf.fill_color "cc0000"
+        #     pdf.text stamp, align: :center, size: 25, rotate: 15
+        #   end
+        # end
       end
 
-      if stamp
-        pdf.bounding_box([150, pdf.cursor - 50], width: pdf.bounds.width - 300) do
-          pdf.font("Helvetica-Bold") do
-            pdf.fill_color "cc0000"
-            pdf.text stamp, align: :center, size: 25, rotate: 15
-          end
-        end
-      end
-
-      pdf.fill_color "000000"
+      # pdf.fill_color "000000"
     end
 
     def self.company_banner(invoice, pdf)
@@ -65,9 +81,16 @@ module Payday
       if image.is_a?(Hash)
         data = image
         image = data[:filename]
-        width, height = data[:size].split("x").map(&:to_f)
+        width, height = data[:size].split("x").map(&:to_f) unless data[:size].nil?
       end
 
+      if width.nil? && height.nil? && image.is_a? String
+        # dims = ImageDims.new( image )
+      end
+
+      width, height = [100, 100] if width.nil? && height.nil?
+
+      
       if File.extname(image) == ".svg"
         logo_info = pdf.svg(File.read(image), at: pdf.bounds.top_left, width: width, height: height)
         logo_height = logo_info[:height]
@@ -311,8 +334,8 @@ module Payday
       cell_proxy.each do |cell|
         max = cell.natural_content_width if cell.natural_content_width > max
       end
-
       max
     end
+    
   end
 end

@@ -26,9 +26,9 @@ module Payday
       self.date_format = "%B %e, %Y"
       self.currency = "USD"
       self.page_size = "LETTER"
-      self.stamps = {paid: File.join(assets_dir, "paid.png"),
-                     overdue: File.join(assets_dir, "past_due.png"),
-                     refunded: File.join(assets_dir, "refunded.png")}
+      self.stamps = {paid: File.join(assets_dir, "paid.jpg"),
+                     overdue: File.join(assets_dir, "past_due.jpg"),
+                     refunded: File.join(assets_dir, "refunded.jpg")}
     end
 
     # Internal: Contruct a new config object.
