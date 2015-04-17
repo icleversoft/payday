@@ -2,6 +2,7 @@ module Payday
   # The PDF renderer. We use this internally in Payday to render pdfs, but really you should just need to call
   # {{Payday::Invoiceable#render_pdf}} to render pdfs yourself.
   class PdfRenderer
+    MAX_LOGO_DIM = 150
     # Renders the given invoice as a pdf on disk
     def self.render_to_file(invoice, path)
       pdf(invoice).render_file(path)
@@ -20,8 +21,8 @@ module Payday
       # set up some default styling
       pdf.font_size(8)
 
-      company_banner(invoice, pdf)
       stamp(invoice, pdf)
+      company_banner(invoice, pdf)
       bill_to_ship_to(invoice, pdf)
       invoice_details(invoice, pdf)
       line_items_table(invoice, pdf)
@@ -90,6 +91,7 @@ module Payday
 
       width, height = [100, 100] if width.nil? && height.nil?
 
+      width, height = fix_logo_dimensions( [width, height])
       
       if File.extname(image) == ".svg"
         logo_info = pdf.svg(File.read(image), at: pdf.bounds.top_left, width: width, height: height)
@@ -337,5 +339,21 @@ module Payday
       max
     end
     
+    def self.fix_logo_dimensions( dimensions )
+      width, height = dimensions
+      if width > MAX_LOGO_DIM || height > MAX_LOGO_DIM
+        ar = width.to_f / height.to_f
+        if width > height
+          width = MAX_LOGO_DIM
+          height = width / ar
+        elsif
+          height = MAX_LOGO_DIM
+          width = ar * height
+        else
+          width = height = MAX_LOGO_DIM
+        end
+      end
+      [width, height]
+    end
   end
 end
