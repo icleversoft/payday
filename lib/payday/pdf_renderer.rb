@@ -126,16 +126,35 @@ module Payday
         bill_to_ship_to_bottom = pdf.cursor
       end
 
-      # render ship to
-      if defined?(invoice.ship_to) && !invoice.ship_to.nil?
-        table = pdf.make_table([[bold_cell(pdf, I18n.t("payday.invoice.ship_to", default: "Ship To"))],
-                                [invoice.ship_to]], column_widths: [200], cell_style: bill_to_cell_style)
-
-        pdf.bounding_box([pdf.bounds.width - table.width, pdf.cursor], width: table.width, height: table.height + 2) do
-          table.draw
-        end
+      table_data = []
+      #Invoice Number
+      table_data << [bold_cell(pdf, "INVOICE #:", {align: :right, size: 10}), 
+                     bold_cell(pdf, "18", {align: :left, size: 10, valign: :top})]
+                     
+      unless invoice.paid_at.nil?
+        #Paid On
+        table_data << [bold_cell(pdf, "Paid on: ", {align: :right}), 
+                       cell(pdf, invoice.paid_at.strftime("%B %d, %Y"), {align: :left})]
+        #Paid By
+        table_data << [bold_cell(pdf, "Paid by: ", {align: :right}), 
+                       cell(pdf, "Mario Scorp", {align: :left})]
       end
-
+      
+      table = pdf.make_table( table_data, column_widths: [70, 100], cell_style: { borders: [], padding: [0, 10, 0, 0] })
+      pdf.bounding_box([pdf.bounds.width - table.width, pdf.cursor], width: table.width, height: table.height + 2) do
+        table.draw
+      end
+      
+      # # render ship to
+      # if defined?(invoice.ship_to) && !invoice.ship_to.nil?
+      #   table = pdf.make_table([[bold_cell(pdf, I18n.t("payday.invoice.ship_to", default: "Ship To"))],
+      #                           [invoice.ship_to]], column_widths: [200], cell_style: bill_to_cell_style)
+      # 
+      #   pdf.bounding_box([pdf.bounds.width - table.width, pdf.cursor], width: table.width, height: table.height + 2) do
+      #     table.draw
+      #   end
+      # end
+      # 
       # make sure we start at the lower of the bill_to or ship_to details
       bill_to_ship_to_bottom = pdf.cursor if pdf.cursor < bill_to_ship_to_bottom
       pdf.move_cursor_to(bill_to_ship_to_bottom - 20)
