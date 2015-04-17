@@ -36,11 +36,11 @@ module Payday
     def self.stamp(invoice, pdf)
       stamps = invoice_or_default(invoice, :stamps)
       if invoice.refunded?
-        stamp = stamps[:refunded]#I18n.t "payday.status.refunded", default: "REFUNDED"
+        stamp = stamps[:refunded]
       elsif invoice.paid?
-        stamp = stamps[:paid]#I18n.t "payday.status.paid", default: "PAID"
+        stamp = stamps[:paid]
       elsif invoice.overdue?
-        stamp = stamps[:overdue]#I18n.t "payday.status.overdue", default: "OVERDUE"
+        stamp = stamps[:overdue]
       end
       
       # stamp = nil
@@ -54,10 +54,10 @@ module Payday
 
       if stamp && File.exist?(stamp)
         # width, height = IO.read(stamp)[0x10..0x18].unpack('NN')
-        width, height = [300, 136]
+        width, height = [120, 88]
         # logo_info = pdf.image(stamp, at: pdf.bounds.top_left, width: width, height: height)
-        logo_info = pdf.image(stamp, at: [(pdf.bounds.width - (width * 0.45))/2, pdf.bounds.top - 30], scale: 0.45)
-        # logo_info = pdf.image(stamp, at: [(pdf.bounds.width - width)/2, 100], width: width, height: height)
+        # logo_info = pdf.image(stamp, at: [(pdf.bounds.width - (width * 0.45))/2, pdf.bounds.top - 30], scale: 0.45)
+        logo_info = pdf.image(stamp, at: [(pdf.bounds.width - width)/2, pdf.bounds.top - 30], width: width, height: height)
         logo_height = logo_info.scaled_height
         
         # pdf.bounding_box([150, pdf.cursor - 50], width: pdf.bounds.width - 300) do
