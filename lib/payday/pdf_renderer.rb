@@ -129,7 +129,7 @@ module Payday
       table_data = []
       #Invoice Number
       table_data << [bold_cell(pdf, "INVOICE #:", {align: :right, size: 10}), 
-                     bold_cell(pdf, "18", {align: :left, size: 10, valign: :top})]
+                     bold_cell(pdf, invoice.invoice_number, {align: :left, size: 10, valign: :top})]
                      
       unless invoice.paid_at.nil?
         #Paid On
@@ -140,7 +140,7 @@ module Payday
                        cell(pdf, "Mario Scorp", {align: :left})]
       end
       
-      table = pdf.make_table( table_data, column_widths: [70, 100], cell_style: { borders: [], padding: [0, 10, 0, 0] })
+      table = pdf.make_table( table_data, column_widths: [70, 100], cell_style: { borders: [], padding: [2, 5, 0, 0] })
       pdf.bounding_box([pdf.bounds.width - table.width, pdf.cursor], width: table.width, height: table.height + 2) do
         table.draw
       end
