@@ -137,8 +137,8 @@ module Payday
         Config.default.reset
       end
 
-      let(:invoice) { new_invoice(invoice_params) }
       let(:invoice_params) { {} }
+      let(:invoice) { new_invoice(invoice_params) }
 
       it "should render to a file" do
         File.unlink("tmp/testing.pdf") if File.exist?("tmp/testing.pdf")
@@ -202,7 +202,9 @@ module Payday
           invoice_date: Date.civil(2011, 1, 1),
           due_at: Date.civil(2011, 1, 22),
           bill_to: "Alan Johnson\n101 This Way\nSomewhere, SC 22222",
-          ship_to: "Frank Johnson\n101 That Way\nOther, SC 22229"
+          ship_to: "Frank Johnson\n101 That Way\nOther, SC 22229",
+          paid_by: "Frank Johnson",
+          paid_with: "Credit Card"
         }
 
         Invoice.new(default_params.merge(params))

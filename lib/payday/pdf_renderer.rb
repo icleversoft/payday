@@ -141,14 +141,12 @@ module Payday
         table_data << [bold_cell(pdf, "Paid on: ", {align: :right}), 
                        cell(pdf, invoice.paid_at.strftime("%B %d, %Y"), {align: :left})]
         
-        if defined?( invoice.paid_by ) && invoice.paid_by
+        if defined?( invoice.paid_by )
           #Paid By
-          p "--------->1"
           table_data << [bold_cell(pdf, "By: ", {align: :right}), 
                          cell(pdf, invoice.paid_by, {align: :left})]
         end
-        if defined?( invoice.paid_with ) && invoice.paid_with?
-          p "--------->2"
+        if defined?( invoice.paid_with )
           #Paid with
           table_data << [bold_cell(pdf, "with: ", {align: :right}), 
                          cell(pdf, invoice.paid_with, {align: :left})]
