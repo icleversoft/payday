@@ -22,6 +22,9 @@ It's pretty easy to use Payday with the built in objects. We include the Invoice
 Example:
 
     invoice = Payday::Invoice.new(:invoice_number => 12)
+    invoice.paid_by = "User Name"
+    invoice.paid_with = "Credit Card"
+    
     invoice.line_items << Payday::LineItem.new(:price => 20, :quantity => 5, :description => "Pants")
     invoice.line_items << Payday::LineItem.new(:price => 10, :quantity => 3, :description => "Shirts")
     invoice.line_items << Payday::LineItem.new(:price => 5, :quantity => 200, :description => "Hats")
@@ -41,6 +44,7 @@ Example:
     Payday::Config.default.invoice_logo = "/path/to/company/logo.png"
     Payday::Config.default.company_name = "Awesome Corp"
     Payday::Config.default.company_details = "10 This Way\nManhattan, NY 10001\n800-111-2222\nawesome@awesomecorp.com"
+    
 
 Using Payday with ActiveRecord Objects (or any other objects, for that matter)
 ===
