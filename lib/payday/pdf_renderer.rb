@@ -24,7 +24,7 @@ module Payday
       stamp(invoice, pdf)
       company_banner(invoice, pdf)
       bill_to_ship_to(invoice, pdf)
-      invoice_details(invoice, pdf)
+      # invoice_details(invoice, pdf)
       line_items_table(invoice, pdf)
       totals_lines(invoice, pdf)
       notes(invoice, pdf)
@@ -131,13 +131,28 @@ module Payday
       table_data << [bold_cell(pdf, "INVOICE #:", {align: :right, size: 10}), 
                      bold_cell(pdf, invoice.invoice_number, {align: :left, size: 10, valign: :top})]
                      
+      #Due date
+      if defined?(invoice.due_at) and !invoice.due_at.nil?
+        table_data << [bold_cell(pdf, I18n.t("payday.invoice.due_date", default: "Due Date"), {align: :right}), 
+                        cell(pdf, invoice.due_at.strftime("%B %d, %Y"), {align: :left})]
+      end
       unless invoice.paid_at.nil?
         #Paid On
         table_data << [bold_cell(pdf, "Paid on: ", {align: :right}), 
                        cell(pdf, invoice.paid_at.strftime("%B %d, %Y"), {align: :left})]
-        #Paid By
-        table_data << [bold_cell(pdf, "Paid by: ", {align: :right}), 
-                       cell(pdf, "Mario Scorp", {align: :left})]
+        
+        if defined?( invoice.paid_by ) && invoice.paid_by
+          #Paid By
+          p "--------->1"
+          table_data << [bold_cell(pdf, "By: ", {align: :right}), 
+                         cell(pdf, invoice.paid_by, {align: :left})]
+        end
+        if defined?( invoice.paid_with ) && invoice.paid_with?
+          p "--------->2"
+          #Paid with
+          table_data << [bold_cell(pdf, "with: ", {align: :right}), 
+                         cell(pdf, invoice.paid_with, {align: :left})]
+        end
       end
       
       table = pdf.make_table( table_data, column_widths: [70, 100], cell_style: { borders: [], padding: [2, 5, 0, 0] })
