@@ -174,7 +174,20 @@ module Payday
           expect(invoice.render_pdf).to match_binary_asset "testing.pdf"
         end
       end
-
+        
+      context "some custom properties" do
+        it "should have some more options" do
+          invoice = new_invoice({paid_with: 'Credit Card', 
+                                 paid_by: 'Mr. Statham', 
+                                 for_period: [Date.civil(2012, 12, 1), Date.civil(2012, 12, 31)]})
+          expect(invoice.paid_with).to eq("Credit Card")
+          expect(invoice.paid_by).to eq("Mr. Statham")
+          expect(invoice.for_period.length).to eq(2)
+          expect(invoice.for_period[0]).to eq(Date.civil(2012, 12, 1))
+          expect(invoice.for_period[1]).to eq(Date.civil(2012, 12, 31))
+        end
+      end
+      
       context "paid, with an svg logo" do
         before do
           logo = { filename: "spec/assets/tiger.svg" }
