@@ -202,7 +202,7 @@ module Payday
             LineItem.new(price: 10, quantity: 3, description: "Shirts"),
             LineItem.new(price: 5, quantity: 200.0, description: "Hats")
           ] * 3
-
+          invoice.for_period = [Date.civil(2012, 12, 1), Date.civil(2012, 12, 31)]
           expect(invoice.render_pdf).to match_binary_asset "svg.pdf"
         end
       end

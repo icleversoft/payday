@@ -131,6 +131,17 @@ module Payday
       table_data << [bold_cell(pdf, "INVOICE #:", {align: :right, size: 10}), 
                      bold_cell(pdf, invoice.invoice_number, {align: :left, size: 10, valign: :top})]
                      
+     if defined?( invoice.for_period ) && invoice.for_period.size == 2
+       #Paid By
+       range = " - "
+       if !invoice.for_period[0].is_a?(String)
+         range = "#{invoice.for_period[0].strftime("%m/%d/%Y")} - #{invoice.for_period[1].strftime("%m/%d/%Y")}"
+       else
+         range =  invoice.for_period.join(" - ")
+       end
+       table_data << [bold_cell(pdf, "For service provided on dates: ", {align: :right}), 
+                      cell(pdf, range, {align: :left})]
+     end
       #Due date
       if defined?(invoice.due_at) and !invoice.due_at.nil?
         table_data << [bold_cell(pdf, I18n.t("payday.invoice.due_date", default: "Due Date"), {align: :right}), 
@@ -153,7 +164,7 @@ module Payday
         end
       end
       
-      table = pdf.make_table( table_data, column_widths: [70, 100], cell_style: { borders: [], padding: [2, 5, 0, 0] })
+      table = pdf.make_table( table_data, column_widths: [170, 100], cell_style: { borders: [], padding: [2, 5, 0, 0] })
       pdf.bounding_box([pdf.bounds.width - table.width, pdf.cursor], width: table.width, height: table.height + 2) do
         table.draw
       end
