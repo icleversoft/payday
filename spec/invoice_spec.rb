@@ -71,6 +71,14 @@ module Payday
       expect(i.total).to eq(BigDecimal.new("1243"))
     end
 
+    context :fees do
+      it "should calculate the total correctly when fees are available" do
+        i = Invoice.new(fee_items: {"fee description" => "1.0", "another fee" => "0.2"})
+        i.line_items << LineItem.new(price: 1, quantity: 2, description: "Pencils")
+        expect(i.total).to eq 3.2
+      end
+    end
+    
     it "is overdue when it's past date and unpaid" do
       i = Invoice.new(due_at: Date.today - 1)
       expect(i.overdue?).to eq(true)
