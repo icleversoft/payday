@@ -75,7 +75,7 @@ module Payday
       it "should calculate the total correctly when fees are available" do
         i = Invoice.new(fee_items: {"fee description" => "1.0", "another fee" => "0.2"})
         i.line_items << LineItem.new(price: 1, quantity: 2, description: "Pencils")
-        expect(i.total).to eq 3.2
+        expect(i.total).to eq BigDecimal.new("3.2")
       end
     end
     
