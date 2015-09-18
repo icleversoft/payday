@@ -72,10 +72,14 @@ module Payday
     end
 
     context :fees do
+      let(:invoice){Invoice.new(fee_items: {"fee description" => "1.0", "another fee" => "0.2"})}
       it "should calculate the total correctly when fees are available" do
-        i = Invoice.new(fee_items: {"fee description" => "1.0", "another fee" => "0.2"})
-        i.line_items << LineItem.new(price: 1, quantity: 2, description: "Pencils")
-        expect(i.total).to eq BigDecimal.new("3.2")
+        invoice.line_items << LineItem.new(price: 1, quantity: 2, description: "Pencils")
+        expect(invoice.total).to eq BigDecimal.new("3.2")
+      end
+      
+      it "line fees is a hash" do
+        expect(invoice.fee_items).to be_an(Hash)
       end
     end
     
