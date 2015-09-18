@@ -209,7 +209,7 @@ module Payday
 
       def new_invoice(params = {})
         default_params = {
-          tax_rate: 0.1,
+          tax_rate: 0.0,
           notes: "These are some crazy awesome notes!",
           invoice_number: 12,
           invoice_date: Date.civil(2011, 1, 1),
@@ -217,7 +217,8 @@ module Payday
           bill_to: "Alan Johnson\n101 This Way\nSomewhere, SC 22222",
           ship_to: "Frank Johnson\n101 That Way\nOther, SC 22229",
           paid_by: "Frank Johnson",
-          paid_with: "Credit Card"
+          paid_with: "Credit Card",
+          fee_items: {"Credit card processing convenience fee (2.9% + $.50)" => "2.34", "Fee late payment" => "0.5"}
         }
 
         Invoice.new(default_params.merge(params))

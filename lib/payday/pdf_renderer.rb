@@ -289,19 +289,26 @@ module Payday
         bold_cell(pdf, I18n.t("payday.invoice.subtotal", default: "Subtotal:")),
         cell(pdf, number_to_currency(invoice.subtotal, invoice), align: :right)
       ]
-
-      if invoice.tax_rate > 0
-        if invoice.tax_description.nil?
-          tax_description = I18n.t("payday.invoice.tax", default: "Tax:")
-        else
-          tax_description = invoice.tax_description
-        end
-
+      
+      invoice.fee_items.each do |descr, val|
         table_data << [
-          bold_cell(pdf, tax_description),
-          cell(pdf, number_to_currency(invoice.tax, invoice), align: :right)
+          bold_cell(pdf, "#{descr}:", align: :right, borders: [1,1,1,1]),
+          # bold_cell(pdf, "#{descr}:"),
+          cell(pdf, number_to_currency(val.to_f, invoice), align: :right)
         ]
       end
+      # if invoice.tax_rate > 0
+      #   if invoice.tax_description.nil?
+      #     tax_description = I18n.t("payday.invoice.tax", default: "Tax:")
+      #   else
+      #     tax_description = invoice.tax_description
+      #   end
+      # 
+      #   table_data << [
+      #     bold_cell(pdf, tax_description),
+      #     cell(pdf, number_to_currency(invoice.tax, invoice), align: :right)
+      #   ]
+      # end
       if invoice.shipping_rate > 0
         if invoice.shipping_description.nil?
           shipping_description =
@@ -316,17 +323,25 @@ module Payday
                align: :right)
         ]
       end
+
+      
       table_data << [
         bold_cell(pdf, I18n.t("payday.invoice.total", default: "Total:"),
                   size: 12),
         cell(pdf, number_to_currency(invoice.total, invoice),
              size: 12, align: :right)
       ]
+
+
       table = pdf.make_table(table_data, cell_style: { borders: [] })
       pdf.bounding_box([pdf.bounds.width - table.width, pdf.cursor],
                        width: table.width, height: table.height + 2) do
 
         table.draw
+        pdf.line_width = 0.8
+        pdf.stroke_color = "000000"
+        pdf.stroke_line([0, pdf.cursor + 24, pdf.bounds.width, pdf.cursor + 24 ])
+        pdf.move_cursor_to(pdf.cursor)
       end
     end
 

@@ -43,10 +43,19 @@ module Payday::Invoiceable
       0
     end
   end
+  
+  def fees
+    if defined?(fees_rate)
+      fees_rate
+    else
+      0
+    end
+  end
 
   # Calculates the total for this invoice.
   def total
-    subtotal + tax + shipping
+    # subtotal + tax + shipping
+    subtotal + tax + fees
   end
 
   def overdue?
