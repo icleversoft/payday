@@ -71,6 +71,18 @@ module Payday
       expect(i.total).to eq(BigDecimal.new("1243"))
     end
 
+    context :fees do
+      let(:invoice){Invoice.new(fee_items: {"fee description" => "1.0", "another fee" => "0.2"})}
+      it "should calculate the total correctly when fees are available" do
+        invoice.line_items << LineItem.new(price: 1, quantity: 2, description: "Pencils")
+        expect(invoice.total).to eq BigDecimal.new("3.2")
+      end
+      
+      it "line fees is a hash" do
+        expect(invoice.fee_items).to be_an(Hash)
+      end
+    end
+    
     it "is overdue when it's past date and unpaid" do
       i = Invoice.new(due_at: Date.today - 1)
       expect(i.overdue?).to eq(true)
