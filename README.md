@@ -1,5 +1,3 @@
-![Build Status](https://www.codeship.io/projects/94d9b760-b088-0131-bef4-5a9e112e295d/status)
-
 Payday!
 ===
 Payday is a library for rendering invoices. At present it supports rendering invoices to pdfs, but we're planning on adding support for other formats in the near future.
