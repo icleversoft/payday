@@ -19,6 +19,13 @@ module Payday
     it "raises an error when none description is provided" do
       expect{ApprovalLine.new}.to raise_error
     end
+    
+    it "responds on every property update" do
+      la.description = 'lala'
+      la.approved = true
+      expect(la.description).to eq('lala')
+      expect(la.approved).to be_truthy
+    end
   end
 end
   
