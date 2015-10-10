@@ -143,6 +143,18 @@ module Payday
       expect(details).to include(%w(Awesome Absolutely))
     end
 
+    describe "approved lines" do
+      i = Invoice.new(approved_items:[ApprovalLine.new(description: 'aa1'), ApprovalLine.new(description: 'aa2', approved: true)])
+      it "stores correctly the number of provided items" do
+        expect(i.approved_items.size).to eq(2)
+      end
+      
+      it "every approved item keeps the right value" do
+        expect(i.approved_items.first.description).to eq('aa1')
+        expect(i.approved_items.first.approved).to be_falsey
+      end
+    end
+    
     describe "rendering" do
       before do
         Dir.mkdir("tmp") unless File.exist?("tmp")
