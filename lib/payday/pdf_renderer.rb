@@ -28,10 +28,46 @@ module Payday
       line_items_table(invoice, pdf)
       totals_lines(invoice, pdf)
       notes(invoice, pdf)
-
+      
+      if invoice.has_approval_items?
+        pdf.start_new_page
+        company_banner(invoice, pdf)
+        aprroved_lines( invoice, pdf)
+      end
+      
       page_numbers(pdf)
 
       pdf
+    end
+
+    class << self
+      def aprroved_lines( invoice, pdf )
+        # table_data << [bold_cell(pdf, I18n.t("payday.line_item.description", default: "Description"), borders: []),
+        #                bold_cell(pdf, I18n.t("payday.line_item.amount", default: "Amount"), align: :right, borders: [])]
+         # [pdf.bounds.right - 18, -15]
+        # pdf.move_cursor_to(pdf.cursor - 20)
+        # pdf.move_cursor_to(pdf.bounds.bottom)
+        check = invoice_or_default(invoice, :check)
+        no_check = invoice_or_default(invoice, :no_check)
+        
+        invoice.approved_items.each do |line|
+          table_data = []
+          table_data << [bold_cell(pdf, line.description, size: 10), 
+            {image: line.approved? ? check : no_check  , image_height: 30}]
+          pdf.move_cursor_to(pdf.cursor - 10)
+          pdf.table(table_data, width: pdf.bounds.width, header: false,
+                    cell_style: { border_width: 0.0, border_color: "cccccc",
+                                  padding: [5, 5] },
+                    row_colors: %w(ffffff ffffff)) do
+
+            natural = natural_column_widths
+            natural[0] = width - natural[1]
+            
+            column_widths = natural
+          end
+        end
+
+      end
     end
 
     def self.stamp(invoice, pdf)
@@ -52,7 +88,6 @@ module Payday
       # elsif invoice.overdue?
       #   stamp = I18n.t "payday.status.overdue", default: "OVERDUE"
       # end
-
       if stamp && File.exist?(stamp)
         # width, height = IO.read(stamp)[0x10..0x18].unpack('NN')
         width, height = [120, 88]

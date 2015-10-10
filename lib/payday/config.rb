@@ -4,6 +4,7 @@ module Payday
   class Config
     attr_accessor :invoice_logo, :company_name, :company_details, :date_format, :currency
     attr_accessor :stamps
+    attr_accessor :check, :no_check
     # Sets the page size to use. See the
     # {http://prawn.majesticseacreature.com/docs/0.10.2/Prawn/Document/PageGeometry.html Prawn documentation} for valid
     # page_size values.
@@ -29,6 +30,8 @@ module Payday
       self.stamps = {paid: File.join(assets_dir, "paid.jpg"),
                      overdue: File.join(assets_dir, "past_due.jpg"),
                      refunded: File.join(assets_dir, "refunded.jpg")}
+      self.check = File.join(assets_dir, "check.png")
+      self.no_check = File.join(assets_dir, "no_check.png")
     end
 
     # Internal: Contruct a new config object.

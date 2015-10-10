@@ -153,6 +153,14 @@ module Payday
         expect(i.approved_items.first.description).to eq('aa1')
         expect(i.approved_items.first.approved).to be_falsey
       end
+      
+      it "responds to has_approval_items method" do
+        expect(i).to respond_to(:has_approval_items?)
+      end
+      
+      it "returns the right status regarding approved line items" do
+        expect(i.has_approval_items?).to be_truthy
+      end
     end
     
     describe "rendering" do
@@ -170,6 +178,16 @@ module Payday
         invoice.render_pdf_to_file("tmp/testing.pdf")
 
         expect(File.exist?("tmp/testing.pdf")).to be true
+      end
+
+      it "renders with approval line items" do
+        invoice.approved_items = [
+          ApprovalLine.new(description: "Lorem ipsum dolor sit amet, brute sonet et ius. Noster graecis eum et, sea no vitae commune corrumpit, ut facer assueverit est. Te cum quis nonumes imperdiet, an vix scaevola mnesarchum, omnes omnesque percipitur cum ad. An accusam eleifend qualisque vel, quo no idque discere aliquam. Ocurreret torquatos eam eu, eam at nisl gubergren.", approved: true),
+          ApprovalLine.new(description: "Lorem ipsum dolor sit amet, ei has sint homero urbanitas. Consequat democritum et his. Ne mel erat percipit, mea ne ipsum detraxit, scribentur reformidans vim ex. Eripuit dissentiunt et quo, ex case inimicus pro, ei idque libris aliquid eos. Nam cibo consequat eu, eam et voluptua maiestatis.")
+          ]
+          File.unlink("tmp/test_aitems.pdf") if File.exist?("tmp/test_aitems.pdf")
+          invoice.render_pdf_to_file("tmp/test_aitems.pdf")
+          # expect(invoice.render_pdf).to match_binary_asset "svg.pdf"
       end
 
       context "with some invoice details" do
@@ -197,8 +215,10 @@ module Payday
           ] * 30
           expect(invoice.render_pdf).to match_binary_asset "testing.pdf"
         end
+
       end
         
+      
       context "some custom properties" do
         it "should have some more options" do
           invoice = new_invoice({paid_with: 'Credit Card', 

@@ -21,10 +21,12 @@ module Payday
     end
     
     it "responds on every property update" do
+      expect(la.description).to eq('foo')
       la.description = 'lala'
       la.approved = true
       expect(la.description).to eq('lala')
       expect(la.approved).to be_truthy
+      expect(la.approved?).to be_truthy
     end
   end
 end

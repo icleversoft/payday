@@ -6,5 +6,9 @@ module Payday
       self.approved = options[:approved] ||= false
       raise ArgumentError.new("description should not be empty") if self.description.empty?
     end
+    
+    def approved?
+      self.approved == true
+    end
   end
 end

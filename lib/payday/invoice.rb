@@ -30,6 +30,9 @@ module Payday
       self.approved_items = options[:approved_items] || []
     end
 
+    def has_approval_items?
+      !self.approved_items.empty?
+    end
     # The tax rate that we're applying, as a BigDecimal
     def tax_rate=(value)
       @tax_rate = BigDecimal.new(value.to_s)
