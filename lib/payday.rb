@@ -15,3 +15,5 @@ require_relative "payday/line_item"
 require_relative "payday/pdf_renderer"
 require_relative "payday/invoiceable"
 require_relative "payday/invoice"
+require_relative "payday/approval_line"
+
