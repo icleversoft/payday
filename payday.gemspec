@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
   s.add_dependency("fastimage", "~> 1.6.7")
 
   s.add_development_dependency("rspec", "~> 3.1.0")
+  s.add_development_dependency("guard-rspec", "4.6.4")
 
   s.files = `git ls-files`.split("\n")
   s.test_files = `git ls-files -- {test,spec,features}/*`.split("\n")

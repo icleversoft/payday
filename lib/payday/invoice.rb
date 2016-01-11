@@ -5,7 +5,7 @@ module Payday
 
     attr_accessor :invoice_number, :bill_to, :ship_to, :notes, :line_items, :shipping_rate, :shipping_description,
       :tax_rate, :tax_description, :due_at, :paid_at, :refunded_at, :currency, :invoice_details, :invoice_date, 
-      :paid_by, :paid_with, :for_period, :fee_items, :approved_items
+      :paid_by, :paid_with, :for_period, :fee_items, :approved_items, :text_items
 
     def initialize(options =  {})
       self.invoice_number = options[:invoice_number] || nil
@@ -28,6 +28,7 @@ module Payday
       self.for_period = options[:for_period] || []
       self.fee_items = options[:fee_items] || {}
       self.approved_items = options[:approved_items] || []
+      self.text_items = options[:text_items] || []
     end
 
     def has_approval_items?
